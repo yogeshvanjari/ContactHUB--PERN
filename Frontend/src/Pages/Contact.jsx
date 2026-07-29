@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+
+const API_URL = import.meta.env.VITE_API_URL;
 import { 
   User, 
   Mail, 
@@ -45,7 +47,7 @@ export default function ContactPage() {
   const contact = () => {
     setIsLoading(true);
     axios
-      .get("http://localhost:3000/contact")
+      .get(`${API_URL}/contact`)
       .then((res) => {
         setData(res.data.menu || res.data || []);
       })
@@ -71,7 +73,7 @@ export default function ContactPage() {
     const dt = { name, email: eml, mob, age, city };
 
     axios
-      .post("http://localhost:3000/addcontact", dt)
+      .post(`${API_URL}/addcontact`, dt)
       .then(() => {
         clearForm();
         contact();
@@ -86,7 +88,7 @@ export default function ContactPage() {
     if (!window.confirm("Are you sure you want to delete this contact?")) return;
 
     axios
-      .delete("http://localhost:3000/contactDelById", { data: { id } })
+      .delete(`${API_URL}/contactDelById`, { data: { id } })
       .then(() => {
         contact();
         // Show delete success message
@@ -114,7 +116,7 @@ export default function ContactPage() {
     const dt = { id: editId, name, email: eml, mob, age, city };
 
     axios
-      .put("http://localhost:3000/updcontact", dt)
+      .put(`${API_URL}/updcontact`, dt)
       .then(() => {
         clearForm();
         contact();

@@ -1,5 +1,11 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+
+// DEBUG: Log environment variables
+console.log("VITE ENV:", import.meta.env);
+console.log("API URL:", import.meta.env.VITE_API_URL);
+
+const API_URL = import.meta.env.VITE_API_URL;
 import { 
   Users, 
   Search, 
@@ -22,12 +28,18 @@ export default function ContactPage() {
   const fetchContacts = () => {
     setIsLoading(true);
     axios
-      .get("http://localhost:3000/contact")
+      .get(`${API_URL}/contact`)
       .then((res) => {
-        setData(res.data.menu || res.data || []);
+        const contacts = Array.isArray(res.data?.menu)
+          ? res.data.menu
+          : Array.isArray(res.data)
+          ? res.data
+          : [];
+        setData(contacts);
       })
       .catch((err) => {
         console.error("Error fetching contacts:", err);
+        setData([]);
       })
       .finally(() => setIsLoading(false));
   };
